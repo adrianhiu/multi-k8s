@@ -14,3 +14,9 @@ after_success:
   - docker build -t adrianhiu/mutli-nginx ./nginx
   - docker build -t adrianhiu/mutli-server ./server
   - docker build -t adrianhiu/mutli-worker ./worker
+  # Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin 
+  - docker push adrianhiu/mutli-client 
+  - docker push adrianhiu/mutli-nginx 
+  - docker push adrianhiu/mutli-server 
+  - docker push adrianhiu/mutli-worker 
