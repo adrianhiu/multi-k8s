@@ -1,0 +1,16 @@
+language: generic 
+sudo: required
+servies: 
+  - docker 
+
+berfore_install:
+  - docker build -t adrianhiu/react-test -f ./client/Dockerfile.dev ./client
+
+script: 
+  - docker run -e CI=true adrianhiu/react-test npm run test
+
+after_success:
+  - docker build -t adrianhiu/mutli-client ./client
+  - docker build -t adrianhiu/mutli-nginx ./nginx
+  - docker build -t adrianhiu/mutli-server ./server
+  - docker build -t adrianhiu/mutli-worker ./worker
