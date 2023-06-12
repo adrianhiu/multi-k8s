@@ -10,13 +10,25 @@ script:
   - docker run -e CI=true adrianhiu/react-test npm run test
 
 after_success:
-  - docker build -t adrianhiu/mutli-client ./client
-  - docker build -t adrianhiu/mutli-nginx ./nginx
-  - docker build -t adrianhiu/mutli-server ./server
-  - docker build -t adrianhiu/mutli-worker ./worker
+  - docker build -t adrianhiu/multi-client ./client
+  - docker build -t adrianhiu/multi-nginx ./nginx
+  - docker build -t adrianhiu/multi-server ./server
+  - docker build -t adrianhiu/multi-worker ./worker
   # Log in to docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin 
-  - docker push adrianhiu/mutli-client 
-  - docker push adrianhiu/mutli-nginx 
-  - docker push adrianhiu/mutli-server 
-  - docker push adrianhiu/mutli-worker 
+  - docker push adrianhiu/multi-client 
+  - docker push adrianhiu/multi-nginx 
+  - docker push adrianhiu/multi-server 
+  - docker push adrianhiu/multi-worker 
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'ap-southeast-1'
+  app: 'multi-docker'
+  env: 'Multi-docker-env'
+  bucket_name: 'elasticbeanstalk-ap-southeast-1-656124236591'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
